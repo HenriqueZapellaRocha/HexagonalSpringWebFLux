@@ -1,4 +1,4 @@
-package com.example.mongospringwebflux.exception;
+package com.example.mongospringwebflux.infrastructure.exception;
 
 
 import lombok.Getter;

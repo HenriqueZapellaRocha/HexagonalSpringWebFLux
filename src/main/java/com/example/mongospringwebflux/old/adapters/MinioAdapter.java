@@ -1,6 +1,6 @@
 package com.example.mongospringwebflux.adapters;
 
-import com.example.mongospringwebflux.exception.GlobalException;
+import com.example.mongospringwebflux.infrastructure.exception.GlobalException;
 import io.minio.MinioAsyncClient;
 import io.minio.PutObjectArgs;
 import io.minio.RemoveObjectArgs;

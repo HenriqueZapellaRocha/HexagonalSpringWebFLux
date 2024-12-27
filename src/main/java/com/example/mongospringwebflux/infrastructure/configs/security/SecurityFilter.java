@@ -1,4 +1,4 @@
-package com.example.mongospringwebflux.configs.security;
+package com.example.mongospringwebflux.infrastructure.configs.security;
 
 
 import com.example.mongospringwebflux.repository.UserRepository;

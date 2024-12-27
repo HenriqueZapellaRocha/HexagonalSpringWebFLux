@@ -4,7 +4,7 @@ package com.example.mongospringwebflux.service.services;
 
 import java.math.BigDecimal;
 import java.util.List;
-import com.example.mongospringwebflux.exception.NotFoundException;
+import com.example.mongospringwebflux.infrastructure.exception.NotFoundException;
 import com.example.mongospringwebflux.integration.exchange.ExchangeIntegration;
 import com.example.mongospringwebflux.repository.ProductRepository;
 import com.example.mongospringwebflux.repository.StoreRepository;

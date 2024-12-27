@@ -2,9 +2,7 @@ package com.example.mongospringwebflux.integration.exchange;
 
 
 
-import com.example.mongospringwebflux.exception.NotFoundException;
-import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
+import com.example.mongospringwebflux.infrastructure.exception.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;

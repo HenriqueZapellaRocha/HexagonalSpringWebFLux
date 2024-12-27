@@ -1,7 +1,7 @@
 package com.example.mongospringwebflux.v1.controller;
 
 
-import com.example.mongospringwebflux.exception.GlobalException;
+import com.example.mongospringwebflux.infrastructure.exception.GlobalException;
 import com.example.mongospringwebflux.service.facades.ImageLogicFacade;
 import com.example.mongospringwebflux.repository.entity.UserEntity;
 import com.example.mongospringwebflux.service.services.CookieService;

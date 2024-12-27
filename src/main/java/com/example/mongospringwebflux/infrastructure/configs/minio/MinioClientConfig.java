@@ -1,4 +1,4 @@
-package com.example.mongospringwebflux.configs.minio;
+package com.example.mongospringwebflux.infrastructure.configs.minio;
 
 import io.minio.MinioAsyncClient;
 import io.minio.MinioClient;
