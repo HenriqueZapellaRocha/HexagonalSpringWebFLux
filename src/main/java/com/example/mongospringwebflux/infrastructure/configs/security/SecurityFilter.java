@@ -1,8 +1,8 @@
 package com.example.mongospringwebflux.infrastructure.configs.security;
 
 
-import com.example.mongospringwebflux.repository.UserRepository;
-import com.example.mongospringwebflux.service.services.securityServices.TokenService;
+import com.example.mongospringwebflux.adapters.outbound.repository.UserRepository;
+import com.example.mongospringwebflux.application.service.services.securityServices.TokenService;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.jetbrains.annotations.NotNull;
