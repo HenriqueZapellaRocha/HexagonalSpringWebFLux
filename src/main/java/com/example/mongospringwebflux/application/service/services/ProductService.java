@@ -7,8 +7,10 @@ import java.util.List;
 
 import com.example.mongospringwebflux.application.service.facades.interfaces.ImageLogicFacadeI;
 import com.example.mongospringwebflux.application.service.interfaces.ProductServiceI;
+import com.example.mongospringwebflux.domain.product.Product;
 import com.example.mongospringwebflux.domain.product.ProductRepositoryI;
 import com.example.mongospringwebflux.domain.store.StoreRepositoryI;
+import com.example.mongospringwebflux.domain.user.User;
 import com.example.mongospringwebflux.infrastructure.exception.NotFoundException;
 import com.example.mongospringwebflux.adapters.outbound.integration.exchange.ExchangeIntegration;
 import com.example.mongospringwebflux.adapters.outbound.repository.product.JpaProductRepository;
@@ -34,16 +36,16 @@ public class ProductService implements ProductServiceI {
     private final ImageLogicFacadeI imageLogicFacade;
     private final ProductMappers productMappers;
 
-    public Mono<ProductResponseDTO> add( ProductRequestDTO product, String from, String to, UserEntity currentUser ) {
-        ProductEntity productEntity = product.toEntity();
+    public Mono<ProductResponseDTO> add( ProductRequestDTO product, String from, String to, User currentUser ) {
+        Product productDomain = productMappers.requestToDomain( product );
 
         return storeRepository.findById( currentUser.getStoreId() )
                 .zipWith( exchangeIntegration.makeExchange( from,to ) )
                 .flatMap( tuple -> {
-                    productEntity.setPrice( product.price()
+                    productDomain.setPrice( product.price()
                                     .multiply( new BigDecimal(String.valueOf( tuple.getT2() ) ) ));
-                    productEntity.setStoreId( tuple.getT1().getId() );
-                    return productRepository.save( productMappers.EntityToDomain( productEntity ) );
+                    productDomain.setStoreId( tuple.getT1().getId() );
+                    return productRepository.save( productDomain );
                 } ).map( savedProduct -> productMappers.DomainToResponseDTO( savedProduct, to ) );
     }
 

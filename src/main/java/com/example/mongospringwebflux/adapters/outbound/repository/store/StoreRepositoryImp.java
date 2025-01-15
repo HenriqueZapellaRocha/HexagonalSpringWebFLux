@@ -2,9 +2,7 @@ package com.example.mongospringwebflux.adapters.outbound.repository.store;
 
 import com.example.mongospringwebflux.domain.store.Store;
 import com.example.mongospringwebflux.domain.store.StoreRepositoryI;
-import com.example.mongospringwebflux.domain.user.User;
 import com.example.mongospringwebflux.utils.mappers.StoreMappers;
-import com.example.mongospringwebflux.utils.mappers.UserMappers;
 import lombok.Data;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;

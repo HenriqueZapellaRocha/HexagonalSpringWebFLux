@@ -1,6 +1,6 @@
 package com.example.mongospringwebflux.adapters.outbound.repository.user;
 
-import com.example.mongospringwebflux.adapters.outbound.repository.entities.UserEntity;
+
 import com.example.mongospringwebflux.domain.user.User;
 import com.example.mongospringwebflux.domain.user.UserRepositoryI;
 import com.example.mongospringwebflux.utils.mappers.UserMappers;
@@ -16,10 +16,9 @@ public class UserRepositoryImp implements UserRepositoryI {
 
     private final JpaUserRepository userRepository;
     private final UserMappers userMappers;
-    private final JpaUserRepository jpaUserRepository;
 
     @Override
-    public Mono<UserDetails> findByLogin( String login ) {
+    public Mono<User> findByLogin( String login ) {
         return userRepository.findByLogin( login );
     }
 
@@ -41,8 +40,8 @@ public class UserRepositoryImp implements UserRepositoryI {
     }
 
     @Override
-    public Mono<Void> delete(User user) {
-        return jpaUserRepository.delete( userMappers.DomainToEntity( user ) );
+    public Mono<Void> delete(User user ) {
+        return userRepository.delete( userMappers.DomainToEntity( user ) );
     }
 
 }

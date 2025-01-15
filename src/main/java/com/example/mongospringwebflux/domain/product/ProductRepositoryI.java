@@ -1,11 +1,9 @@
 package com.example.mongospringwebflux.domain.product;
 
-import com.example.mongospringwebflux.domain.store.Store;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
 import java.util.List;
-import java.util.Optional;
+
 
 public interface ProductRepositoryI {
 

@@ -9,11 +9,6 @@ import com.example.mongospringwebflux.domain.user.UserRepositoryI;
 import com.example.mongospringwebflux.infrastructure.exception.GlobalException;
 import com.example.mongospringwebflux.infrastructure.exception.NotFoundException;
 import com.example.mongospringwebflux.adapters.outbound.integration.exchange.ExchangeIntegration;
-import com.example.mongospringwebflux.adapters.outbound.repository.product.JpaProductRepository;
-import com.example.mongospringwebflux.adapters.outbound.repository.store.JpaStoreRepository;
-import com.example.mongospringwebflux.adapters.outbound.repository.user.JpaUserRepository;
-import com.example.mongospringwebflux.adapters.outbound.repository.entities.ProductEntity;
-import com.example.mongospringwebflux.adapters.outbound.repository.entities.UserEntity;
 import com.example.mongospringwebflux.application.service.facades.ImageLogicFacade;
 import com.example.mongospringwebflux.domain.DTOS.requests.ProductRequestDTO;
 import com.example.mongospringwebflux.domain.DTOS.responses.ProductResponseDTO;
@@ -77,7 +72,7 @@ public class AdminService implements AdminServiceI {
 
     public Mono<Void> deleteManyProducts( List<String> productIds ) {
         return productRepository.findAllById( productIds )
-                .flatMap(product ->
+                .flatMap( product ->
                         Mono.when(
                         imageLogicFacade.deleteImage( product ),
                         productRepository.deleteById( product.getProductID() )

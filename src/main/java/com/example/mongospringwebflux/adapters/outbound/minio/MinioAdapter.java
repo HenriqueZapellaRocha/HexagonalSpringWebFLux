@@ -28,31 +28,31 @@ public class MinioAdapter {
     private String bucketName;
 
 
-    public Mono<Void> uploadFile(Mono<FilePart> file, String fileName) {
+    public Mono<Void> uploadFile( Mono<FilePart> file, String fileName ) {
 
-        return file.flatMap(filePart -> {
+        return file.flatMap( filePart -> {
             Flux<DataBuffer> dataBufferFlux = filePart.content();
 
-            return DataBufferUtils.join(dataBufferFlux)
-                    .publishOn(Schedulers.boundedElastic())
-                    .flatMap(dataBuffer -> {
-                        InputStream inputStream = new ByteArrayInputStream(dataBuffer.toByteBuffer().array());
+            return DataBufferUtils.join( dataBufferFlux )
+                    .publishOn( Schedulers.boundedElastic() )
+                    .flatMap( dataBuffer -> {
+                        InputStream inputStream = new ByteArrayInputStream( dataBuffer.toByteBuffer().array() );
 
                         PutObjectArgs uploadObjectArgs = PutObjectArgs.builder()
-                                .bucket(bucketName)
-                                .object(fileName)
-                                .stream(inputStream, dataBuffer.readableByteCount(), -1)
+                                .bucket( bucketName )
+                                .object( fileName )
+                                .stream( inputStream, dataBuffer.readableByteCount(), -1 )
                                 .build();
 
-                        return Mono.fromFuture(() -> {
+                        return Mono.fromFuture( () -> {
                             try {
-                                return minioClient.putObject(uploadObjectArgs);
-                            } catch (Exception e) {
-                                throw new RuntimeException(e);
+                                return minioClient.putObject( uploadObjectArgs );
+                            } catch ( Exception e ) {
+                                throw new RuntimeException( e );
                             }
                         });
                     }).then()
-                    .onErrorResume(e -> Mono.error(new RuntimeException("Unexpected error during file upload", e)));
+                    .onErrorResume( e -> Mono.error( new RuntimeException( "Unexpected error during file upload", e )));
         });
     }
 

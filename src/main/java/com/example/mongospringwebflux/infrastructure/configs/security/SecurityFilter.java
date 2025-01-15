@@ -1,8 +1,10 @@
 package com.example.mongospringwebflux.infrastructure.configs.security;
 
 
-import com.example.mongospringwebflux.adapters.outbound.repository.user.JpaUserRepository;
+import com.example.mongospringwebflux.adapters.outbound.repository.entities.UserEntity;
 import com.example.mongospringwebflux.application.service.services.securityServices.TokenService;
+import com.example.mongospringwebflux.domain.user.UserRepositoryI;
+import com.example.mongospringwebflux.utils.mappers.UserMappers;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.jetbrains.annotations.NotNull;
@@ -19,8 +21,9 @@ import reactor.core.publisher.Mono;
 @Component
 public class SecurityFilter implements WebFilter {
 
+    private final UserMappers userMappers;
     private TokenService tokenService;
-    private JpaUserRepository jpaUserRepository;
+    private UserRepositoryI userRepository;
 
     @NotNull
     @Override
@@ -31,10 +34,12 @@ public class SecurityFilter implements WebFilter {
 
         if ( token != null ) {
             return tokenService.validateToke( token )
-                    .flatMap( login -> jpaUserRepository.findByLogin( login )
+                    .flatMap( login -> userRepository.findByLogin( login )
                             .flatMap( user -> {
+                                //TODO create a entity focused in auth
+                                UserEntity userEntity = userMappers.DomainToEntity( user );
                                 var authentication = new UsernamePasswordAuthenticationToken( user, null,
-                                                                                            user.getAuthorities() );
+                                                                                            userEntity.getAuthorities() );
                                 return chain.filter( exchange )
                                         .contextWrite( ReactiveSecurityContextHolder
                                                 .withAuthentication( authentication ));

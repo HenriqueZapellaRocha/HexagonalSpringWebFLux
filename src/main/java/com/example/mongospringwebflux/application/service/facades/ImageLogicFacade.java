@@ -9,6 +9,7 @@ import com.example.mongospringwebflux.adapters.outbound.repository.entities.User
 import com.example.mongospringwebflux.application.service.facades.interfaces.ImageLogicFacadeI;
 import com.example.mongospringwebflux.domain.product.Product;
 import com.example.mongospringwebflux.domain.product.ProductRepositoryI;
+import com.example.mongospringwebflux.domain.user.User;
 import com.example.mongospringwebflux.domain.user.UserRepositoryI;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -25,7 +26,7 @@ public class ImageLogicFacade implements ImageLogicFacadeI {
     private final ProductRepositoryI productRepository;
     private final MinioAdapter minioAdapter;
 
-    public Mono<String> validateAndPersistsImage( FilePart image, String productId, UserEntity currentUser ) {
+    public Mono<String> validateAndPersistsImage( FilePart image, String productId, User currentUser ) {
 
         return productRepository.getByStoreId( currentUser.getStoreId() )
                 .filter( product -> product.getProductID().equals( productId ) )

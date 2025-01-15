@@ -3,11 +3,13 @@ package com.example.mongospringwebflux.adapters.inbound.controller;
 
 import com.example.mongospringwebflux.application.service.interfaces.CookieServiceI;
 import com.example.mongospringwebflux.application.service.interfaces.ProductServiceI;
+import com.example.mongospringwebflux.domain.user.User;
 import com.example.mongospringwebflux.infrastructure.exception.GlobalException;
 import com.example.mongospringwebflux.application.service.facades.ImageLogicFacade;
 import com.example.mongospringwebflux.adapters.outbound.repository.entities.UserEntity;
 import com.example.mongospringwebflux.domain.DTOS.requests.ProductRequestDTO;
 import com.example.mongospringwebflux.domain.DTOS.responses.ProductResponseDTO;
+import com.example.mongospringwebflux.utils.mappers.UserMappers;
 import jakarta.validation.Valid;
 import org.apache.commons.compress.utils.FileNameUtils;
 import org.springframework.http.codec.multipart.FilePart;
@@ -30,12 +32,13 @@ public class ProductController {
     private final ProductServiceI productService;
     private final ImageLogicFacade imageLogicFacade;
     private final CookieServiceI cookieService;
+    private final UserMappers userMappers;
 
 
     @PostMapping( "/add" )
     public Mono<ProductResponseDTO> add( @RequestBody @Valid ProductRequestDTO product,
                                          @RequestParam( name = "currency" ) String currency,
-                                         @AuthenticationPrincipal UserEntity currentUser ) {
+                                         @AuthenticationPrincipal User currentUser ) {
 
         return productService.add( product,currency, "USD", currentUser );
     }
@@ -43,7 +46,7 @@ public class ProductController {
     @PostMapping("/uploadProductImage")
     public Mono<String> uploadFile( @RequestPart("files") FilePart filePart,
                                     @RequestPart("productId") String productId,
-                                    @AuthenticationPrincipal UserEntity currentUser ) {
+                                    @AuthenticationPrincipal User currentUser ) {
 
         if( FileNameUtils.getExtension( filePart.filename() ).equals( "png" ) ||
             FileNameUtils.getExtension( filePart.filename() ).equals( "jpg" ) ||
@@ -93,13 +96,13 @@ public class ProductController {
 
     @DeleteMapping( "/{id}" )
     public Mono<Void> deleteById( @PathVariable String id,
-                                  @AuthenticationPrincipal UserEntity currentUser ) {
+                                  @AuthenticationPrincipal User currentUser ) {
         return productService.deleteMany( List.of(id), currentUser.getStoreId() );
     }
 
     @DeleteMapping
     public Mono<Void> deleteMany( @RequestBody List<String> id,
-                                  @AuthenticationPrincipal UserEntity currentUser ) {
+                                  @AuthenticationPrincipal User currentUser ) {
         return productService.deleteMany( id, currentUser.getStoreId() );
     }
 }
