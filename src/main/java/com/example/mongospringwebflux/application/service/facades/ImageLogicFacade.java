@@ -7,6 +7,9 @@ import com.example.mongospringwebflux.adapters.outbound.repository.user.JpaUserR
 import com.example.mongospringwebflux.adapters.outbound.repository.entities.ProductEntity;
 import com.example.mongospringwebflux.adapters.outbound.repository.entities.UserEntity;
 import com.example.mongospringwebflux.application.service.facades.interfaces.ImageLogicFacadeI;
+import com.example.mongospringwebflux.domain.product.Product;
+import com.example.mongospringwebflux.domain.product.ProductRepositoryI;
+import com.example.mongospringwebflux.domain.user.UserRepositoryI;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.http.codec.multipart.FilePart;
@@ -19,25 +22,24 @@ import reactor.core.publisher.Mono;
 @Service
 public class ImageLogicFacade implements ImageLogicFacadeI {
 
-    private final JpaProductRepository jpaProductRepository;
+    private final ProductRepositoryI productRepository;
     private final MinioAdapter minioAdapter;
-    private final JpaUserRepository jpaUserRepository;
 
     public Mono<String> validateAndPersistsImage( FilePart image, String productId, UserEntity currentUser ) {
 
-        return jpaProductRepository.getByStoreId( currentUser.getStoreId() )
+        return productRepository.getByStoreId( currentUser.getStoreId() )
                 .filter( product -> product.getProductID().equals( productId ) )
                 .switchIfEmpty( Mono.defer( () -> Mono.error(
                         new BadCredentialsException( "This product don't exist or not related with this store" ) ) ))
                 .flatMap( product -> {
                     product.setImageUrl( "http://localhost:9000/product-images/"+product.getProductID() );
-                    return jpaProductRepository.save( product );
+                    return productRepository.save( product );
                 } )
                 .flatMap( product -> minioAdapter.uploadFile( Mono.just( image ), product.getProductID() ) )
                 .then( Mono.just( "http://localhost:9000/product-images/"+productId ) );
     }
 
-    public Mono<Void> deleteImage( ProductEntity product ) {
+    public Mono<Void> deleteImage( Product product ) {
 
         if( !product.getImageUrl().equals( "has no image" ) )
             return minioAdapter.deleteFile( product.getProductID() );

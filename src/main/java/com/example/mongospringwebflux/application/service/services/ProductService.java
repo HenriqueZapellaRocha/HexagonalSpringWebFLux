@@ -5,16 +5,19 @@ package com.example.mongospringwebflux.application.service.services;
 import java.math.BigDecimal;
 import java.util.List;
 
+import com.example.mongospringwebflux.application.service.facades.interfaces.ImageLogicFacadeI;
 import com.example.mongospringwebflux.application.service.interfaces.ProductServiceI;
+import com.example.mongospringwebflux.domain.product.ProductRepositoryI;
+import com.example.mongospringwebflux.domain.store.StoreRepositoryI;
 import com.example.mongospringwebflux.infrastructure.exception.NotFoundException;
 import com.example.mongospringwebflux.adapters.outbound.integration.exchange.ExchangeIntegration;
 import com.example.mongospringwebflux.adapters.outbound.repository.product.JpaProductRepository;
-import com.example.mongospringwebflux.adapters.outbound.repository.store.JpaStoreRepository;
 import com.example.mongospringwebflux.adapters.outbound.repository.entities.ProductEntity;
 import com.example.mongospringwebflux.adapters.outbound.repository.entities.UserEntity;
 import com.example.mongospringwebflux.application.service.facades.ImageLogicFacade;
 import com.example.mongospringwebflux.domain.DTOS.requests.ProductRequestDTO;
 import com.example.mongospringwebflux.domain.DTOS.responses.ProductResponseDTO;
+import com.example.mongospringwebflux.utils.mappers.ProductMappers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
@@ -25,31 +28,32 @@ import reactor.core.publisher.Mono;
 @Service
 public class ProductService implements ProductServiceI {
 
-    private final JpaProductRepository jpaProductRepository;
+    private final ProductRepositoryI productRepository;
     private final ExchangeIntegration exchangeIntegration;
-    private final JpaStoreRepository jpaStoreRepository;
-    private final ImageLogicFacade imageLogicFacade;
+    private final StoreRepositoryI storeRepository;
+    private final ImageLogicFacadeI imageLogicFacade;
+    private final ProductMappers productMappers;
 
     public Mono<ProductResponseDTO> add( ProductRequestDTO product, String from, String to, UserEntity currentUser ) {
         ProductEntity productEntity = product.toEntity();
 
-        return jpaStoreRepository.findById( currentUser.getStoreId() )
+        return storeRepository.findById( currentUser.getStoreId() )
                 .zipWith( exchangeIntegration.makeExchange( from,to ) )
                 .flatMap( tuple -> {
                     productEntity.setPrice( product.price()
                                     .multiply( new BigDecimal(String.valueOf( tuple.getT2() ) ) ));
                     productEntity.setStoreId( tuple.getT1().getId() );
-                    return jpaProductRepository.save( productEntity );
-                } ).map( savedProductEntity -> ProductResponseDTO.entityToResponse( savedProductEntity, to ) );
+                    return productRepository.save( productMappers.EntityToDomain( productEntity ) );
+                } ).map( savedProduct -> productMappers.DomainToResponseDTO( savedProduct, to ) );
     }
 
     public Mono<ProductResponseDTO> getById( String id, String from, String to ) {
-        return jpaProductRepository.findById( id )
+        return productRepository.findById( id )
                         .switchIfEmpty( Mono.defer( () -> Mono.error( new NotFoundException( "No product found" ) ) ))
                 .zipWith( exchangeIntegration.makeExchange( from,to ), ( product,exchangeRate ) -> {
                     product.setPrice( product.getPrice()
                             .multiply( new BigDecimal( String.valueOf( exchangeRate ) ) ) );
-                    return ProductResponseDTO.entityToResponse( product, to );
+                    return productMappers.DomainToResponseDTO( product, to );
                 });
     }
 
@@ -58,7 +62,7 @@ public class ProductService implements ProductServiceI {
 
         ProductEntity productEntity = product.toEntity( id );
 
-        return jpaProductRepository.findById( id )
+        return productRepository.findById( id )
                 .switchIfEmpty(Mono.defer( () ->  Mono.error ( new NotFoundException( "No product found" ) ) ) )
                 .filter( product1 -> product1.getStoreId().equals( storeId ) )
                 .zipWith( exchangeIntegration.makeExchange( from,to ) )
@@ -69,29 +73,29 @@ public class ProductService implements ProductServiceI {
 
                         tuple.getT1().setPrice( productEntity.getPrice()
                             .multiply( new BigDecimal(String.valueOf( tuple.getT2()) ) ));
-                    return jpaProductRepository.save( tuple.getT1() );
+                    return productRepository.save( tuple.getT1() );
 
-                 }).map( productSaved -> ProductResponseDTO.entityToResponse( productSaved, "USD" ) );
+                 }).map( productSaved -> productMappers.DomainToResponseDTO( productSaved, "USD" ) );
         }
 
     public Flux<ProductResponseDTO> getAll( String from, String to ) {
         return exchangeIntegration.makeExchange( from, to )
-                .flatMapMany( exchangeRate -> jpaProductRepository.findAll()
-                        .map( productEntity -> {
-                            productEntity.setPrice( productEntity.getPrice()
+                .flatMapMany( exchangeRate -> productRepository.findAll()
+                        .map( product -> {
+                            product.setPrice( product.getPrice()
                                     .multiply( new BigDecimal( String.valueOf( exchangeRate ))));
 
-                            return ProductResponseDTO.entityToResponse( productEntity, to );
+                            return productMappers.DomainToResponseDTO( product, to );
                         }));
     }
 
 
     public Mono<Void> deleteMany( List<String> ids, String storeId ) {
 
-        return jpaProductRepository.findAllById( ids )
+        return productRepository.findAllById( ids )
                 .filter( productEntities -> productEntities.getStoreId().equals( storeId ) )
                 .switchIfEmpty( Mono.defer( () -> Mono.error( new NotFoundException( "No product found" ) ) ) )
-                .flatMap( product -> jpaProductRepository.delete( product )
+                .flatMap( product -> productRepository.delete( product )
                         .then( imageLogicFacade.deleteImage( product ) ))
                 .then();
     }
@@ -99,9 +103,9 @@ public class ProductService implements ProductServiceI {
 
     public Flux<ProductResponseDTO> getAllProductsRelatedStore( String storeId, String currency ) {
 
-        return jpaProductRepository.getByStoreId( storeId )
+        return productRepository.getByStoreId( storeId )
                 .switchIfEmpty( Mono.defer( () -> Mono.error( new NotFoundException( "No product found" ) ) ) )
-                .map( productEntity -> ProductResponseDTO.entityToResponse( productEntity, currency ) );
+                .map( productEntity -> productMappers.DomainToResponseDTO( productEntity, currency ) );
 
     }
 }
