@@ -1,10 +1,11 @@
 package com.example.mongospringwebflux.application.service.facades;
 
-import com.example.mongospringwebflux.adapters.outbound.repository.entity.enums.UserRoles;
-import com.example.mongospringwebflux.application.service.services.StoreService;
-import com.example.mongospringwebflux.application.service.services.securityServices.UserService;
-import com.example.mongospringwebflux.adapters.inbound.controller.DTOS.requests.RegisterRequestDTO;
-import com.example.mongospringwebflux.adapters.inbound.controller.DTOS.responses.RegisterResponseDTO;
+import com.example.mongospringwebflux.application.service.facades.interfaces.RegisterFacadeI;
+import com.example.mongospringwebflux.application.service.interfaces.StoreServiceI;
+import com.example.mongospringwebflux.application.service.services.securityServices.interfaces.UserServiceI;
+import com.example.mongospringwebflux.domain.enums.UserRoles;
+import com.example.mongospringwebflux.domain.DTOS.requests.RegisterRequestDTO;
+import com.example.mongospringwebflux.domain.DTOS.responses.RegisterResponseDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -16,10 +17,10 @@ import java.util.UUID;
 @Service
 @Data
 @AllArgsConstructor
-public class RegisterFacade {
+public class RegisterFacade implements RegisterFacadeI {
 
-    private final StoreService storeService;
-    private final UserService userService;
+    private final StoreServiceI storeService;
+    private final UserServiceI userService;
 
     public Mono<RegisterResponseDTO> registerUser(RegisterRequestDTO registerRequest ) {
 

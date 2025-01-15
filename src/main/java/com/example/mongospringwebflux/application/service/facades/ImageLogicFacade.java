@@ -2,10 +2,11 @@ package com.example.mongospringwebflux.application.service.facades;
 
 
 import com.example.mongospringwebflux.adapters.outbound.minio.MinioAdapter;
-import com.example.mongospringwebflux.adapters.outbound.repository.ProductRepository;
-import com.example.mongospringwebflux.adapters.outbound.repository.UserRepository;
-import com.example.mongospringwebflux.adapters.outbound.repository.entity.ProductEntity;
-import com.example.mongospringwebflux.adapters.outbound.repository.entity.UserEntity;
+import com.example.mongospringwebflux.adapters.outbound.repository.product.JpaProductRepository;
+import com.example.mongospringwebflux.adapters.outbound.repository.user.JpaUserRepository;
+import com.example.mongospringwebflux.adapters.outbound.repository.entities.ProductEntity;
+import com.example.mongospringwebflux.adapters.outbound.repository.entities.UserEntity;
+import com.example.mongospringwebflux.application.service.facades.interfaces.ImageLogicFacadeI;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.http.codec.multipart.FilePart;
@@ -16,21 +17,21 @@ import reactor.core.publisher.Mono;
 @Data
 @AllArgsConstructor
 @Service
-public class ImageLogicFacade {
+public class ImageLogicFacade implements ImageLogicFacadeI {
 
-    private final ProductRepository productRepository;
+    private final JpaProductRepository jpaProductRepository;
     private final MinioAdapter minioAdapter;
-    private final UserRepository userRepository;
+    private final JpaUserRepository jpaUserRepository;
 
     public Mono<String> validateAndPersistsImage( FilePart image, String productId, UserEntity currentUser ) {
 
-        return productRepository.getByStoreId( currentUser.getStoreId() )
+        return jpaProductRepository.getByStoreId( currentUser.getStoreId() )
                 .filter( product -> product.getProductID().equals( productId ) )
                 .switchIfEmpty( Mono.defer( () -> Mono.error(
                         new BadCredentialsException( "This product don't exist or not related with this store" ) ) ))
                 .flatMap( product -> {
                     product.setImageUrl( "http://localhost:9000/product-images/"+product.getProductID() );
-                    return productRepository.save( product );
+                    return jpaProductRepository.save( product );
                 } )
                 .flatMap( product -> minioAdapter.uploadFile( Mono.just( image ), product.getProductID() ) )
                 .then( Mono.just( "http://localhost:9000/product-images/"+productId ) );

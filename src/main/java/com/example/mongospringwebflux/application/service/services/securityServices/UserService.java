@@ -1,11 +1,13 @@
 package com.example.mongospringwebflux.application.service.services.securityServices;
 
-import com.example.mongospringwebflux.adapters.outbound.repository.UserRepository;
-import com.example.mongospringwebflux.adapters.outbound.repository.entity.UserEntity;
-import com.example.mongospringwebflux.adapters.inbound.controller.DTOS.responses.AuthResponseDTO;
-import com.example.mongospringwebflux.adapters.inbound.controller.DTOS.requests.RegisterRequestDTO;
-import com.example.mongospringwebflux.adapters.inbound.controller.DTOS.responses.RegisterResponseDTO;
-import com.example.mongospringwebflux.adapters.inbound.controller.DTOS.requests.loginRequestDTO;
+import com.example.mongospringwebflux.adapters.outbound.repository.entities.UserEntity;
+import com.example.mongospringwebflux.domain.DTOS.responses.AuthResponseDTO;
+import com.example.mongospringwebflux.domain.DTOS.requests.RegisterRequestDTO;
+import com.example.mongospringwebflux.domain.DTOS.responses.RegisterResponseDTO;
+import com.example.mongospringwebflux.domain.DTOS.requests.loginRequestDTO;
+import com.example.mongospringwebflux.application.service.services.securityServices.interfaces.UserServiceI;
+import com.example.mongospringwebflux.domain.user.User;
+import com.example.mongospringwebflux.domain.user.UserRepositoryI;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,18 +22,18 @@ import reactor.core.publisher.Mono;
 @Data
 @AllArgsConstructor
 @Service
-public class UserService {
+public class UserService implements UserServiceI {
 
-    private UserRepository userRepository;
+    private UserRepositoryI userRepository;
     private ReactiveAuthenticationManager authenticationManager;
-    private TokenService tokenService;
+    private TokenServiceI tokenService;
 
     public Mono<RegisterResponseDTO> createUser( RegisterRequestDTO registerRequest, String storeId ) {
         return Mono.just( registerRequest )
                 .map( registerRequestDTO -> new BCryptPasswordEncoder().encode( registerRequestDTO.password() ))
                 .flatMap( password -> {
 
-                    UserEntity newUser = UserEntity.builder()
+                    User newUser = User.builder()
                             .login( registerRequest.login() )
                             .password(password)
                             .role( registerRequest.role() )

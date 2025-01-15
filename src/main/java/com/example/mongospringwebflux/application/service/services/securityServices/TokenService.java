@@ -3,15 +3,16 @@ package com.example.mongospringwebflux.application.service.services.securityServ
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.example.mongospringwebflux.application.service.services.securityServices.interfaces.TokenServiceI;
 import com.example.mongospringwebflux.infrastructure.exception.GlobalException;
-import com.example.mongospringwebflux.adapters.outbound.repository.entity.UserEntity;
+import com.example.mongospringwebflux.adapters.outbound.repository.entities.UserEntity;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 
 @Service
-public class TokenService {
+public class TokenService implements TokenServiceI {
 
     public Mono<String> generateToke(UserEntity userEntity) {
         return Mono.defer(() -> {

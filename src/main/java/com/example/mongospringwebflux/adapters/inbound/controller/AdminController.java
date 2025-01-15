@@ -2,9 +2,9 @@ package com.example.mongospringwebflux.adapters.inbound.controller;
 
 
 import com.example.mongospringwebflux.application.service.services.AdminService;
-import com.example.mongospringwebflux.adapters.inbound.controller.DTOS.requests.ProductRequestDTO;
-import com.example.mongospringwebflux.adapters.inbound.controller.DTOS.responses.ProductResponseDTO;
-import com.example.mongospringwebflux.adapters.inbound.controller.DTOS.responses.UserResponseDTO;
+import com.example.mongospringwebflux.domain.DTOS.requests.ProductRequestDTO;
+import com.example.mongospringwebflux.domain.DTOS.responses.ProductResponseDTO;
+import com.example.mongospringwebflux.domain.DTOS.responses.UserResponseDTO;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;

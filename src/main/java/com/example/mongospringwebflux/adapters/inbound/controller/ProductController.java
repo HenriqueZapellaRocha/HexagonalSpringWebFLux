@@ -1,13 +1,13 @@
 package com.example.mongospringwebflux.adapters.inbound.controller;
 
 
+import com.example.mongospringwebflux.application.service.interfaces.CookieServiceI;
+import com.example.mongospringwebflux.application.service.interfaces.ProductServiceI;
 import com.example.mongospringwebflux.infrastructure.exception.GlobalException;
 import com.example.mongospringwebflux.application.service.facades.ImageLogicFacade;
-import com.example.mongospringwebflux.adapters.outbound.repository.entity.UserEntity;
-import com.example.mongospringwebflux.application.service.services.CookieService;
-import com.example.mongospringwebflux.application.service.services.ProductService;
-import com.example.mongospringwebflux.adapters.inbound.controller.DTOS.requests.ProductRequestDTO;
-import com.example.mongospringwebflux.adapters.inbound.controller.DTOS.responses.ProductResponseDTO;
+import com.example.mongospringwebflux.adapters.outbound.repository.entities.UserEntity;
+import com.example.mongospringwebflux.domain.DTOS.requests.ProductRequestDTO;
+import com.example.mongospringwebflux.domain.DTOS.responses.ProductResponseDTO;
 import jakarta.validation.Valid;
 import org.apache.commons.compress.utils.FileNameUtils;
 import org.springframework.http.codec.multipart.FilePart;
@@ -27,8 +27,9 @@ import java.util.List;
 @RequestMapping( "/product" )
 public class ProductController {
 
-    private final ProductService productService;
+    private final ProductServiceI productService;
     private final ImageLogicFacade imageLogicFacade;
+    private final CookieServiceI cookieService;
 
 
     @PostMapping( "/add" )
@@ -60,7 +61,7 @@ public class ProductController {
 
         return productService.getById( id, "USD", currency )
                 .doOnNext( product -> {
-                    CookieService.setCookie( response, product.productID() );
+                    cookieService.setCookie( response, product.productID() );
                 });
     }
 

@@ -1,18 +1,19 @@
 package com.example.mongospringwebflux.application.service.services;
 
 
+import com.example.mongospringwebflux.application.service.interfaces.AdminServiceI;
 import com.example.mongospringwebflux.infrastructure.exception.GlobalException;
 import com.example.mongospringwebflux.infrastructure.exception.NotFoundException;
 import com.example.mongospringwebflux.adapters.outbound.integration.exchange.ExchangeIntegration;
-import com.example.mongospringwebflux.adapters.outbound.repository.ProductRepository;
-import com.example.mongospringwebflux.adapters.outbound.repository.StoreRepository;
-import com.example.mongospringwebflux.adapters.outbound.repository.UserRepository;
-import com.example.mongospringwebflux.adapters.outbound.repository.entity.ProductEntity;
-import com.example.mongospringwebflux.adapters.outbound.repository.entity.UserEntity;
+import com.example.mongospringwebflux.adapters.outbound.repository.product.JpaProductRepository;
+import com.example.mongospringwebflux.adapters.outbound.repository.store.JpaStoreRepository;
+import com.example.mongospringwebflux.adapters.outbound.repository.user.JpaUserRepository;
+import com.example.mongospringwebflux.adapters.outbound.repository.entities.ProductEntity;
+import com.example.mongospringwebflux.adapters.outbound.repository.entities.UserEntity;
 import com.example.mongospringwebflux.application.service.facades.ImageLogicFacade;
-import com.example.mongospringwebflux.adapters.inbound.controller.DTOS.requests.ProductRequestDTO;
-import com.example.mongospringwebflux.adapters.inbound.controller.DTOS.responses.ProductResponseDTO;
-import com.example.mongospringwebflux.adapters.inbound.controller.DTOS.responses.UserResponseDTO;
+import com.example.mongospringwebflux.domain.DTOS.requests.ProductRequestDTO;
+import com.example.mongospringwebflux.domain.DTOS.responses.ProductResponseDTO;
+import com.example.mongospringwebflux.domain.DTOS.responses.UserResponseDTO;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
@@ -22,11 +23,11 @@ import java.util.List;
 
 @Service
 @AllArgsConstructor
-public class AdminService {
+public class AdminService implements AdminServiceI {
 
-    private final ProductRepository productRepository;
-    private final UserRepository userRepository;
-    private final StoreRepository storeRepository;
+    private final JpaProductRepository jpaProductRepository;
+    private final JpaUserRepository jpaUserRepository;
+    private final JpaStoreRepository jpaStoreRepository;
     private final ExchangeIntegration exchangeIntegration;
     private final ImageLogicFacade imageLogicFacade;
 
@@ -34,49 +35,49 @@ public class AdminService {
                                                               String to, String storeId ) {
         ProductEntity productEntity = product.toEntity();
 
-        return storeRepository.findById( storeId )
+        return jpaStoreRepository.findById( storeId )
                 .switchIfEmpty( Mono.defer( () -> Mono.error( new NotFoundException( "The store don't exist" ) ) ) )
                 .flatMap( storeEntity -> exchangeIntegration.makeExchange( from,to )
                         .flatMap( exchangeRate -> {
                             productEntity.setPrice(product.price()
                                     .multiply( new BigDecimal( String.valueOf( exchangeRate ) ) ));
                             productEntity.setStoreId( storeEntity.getId() );
-                            return productRepository.save( productEntity );
+                            return jpaProductRepository.save( productEntity );
                         })
                         .map( savedProductEntity -> ProductResponseDTO.entityToResponse( savedProductEntity, to ) ));
     }
 
     public Mono<Void> deleteUserAndAllInformationRelated( String userId ) {
 
-        return userRepository.findById( userId )
+        return jpaUserRepository.findById( userId )
                 .switchIfEmpty( Mono.defer( () -> Mono.error(new NotFoundException( "User not found" ) )))
                 .flatMap( userEntity -> {
                     String storeId = userEntity.getStoreId();
 
-                    return productRepository.findAllByStoreId( storeId )
+                    return jpaProductRepository.findAllByStoreId( storeId )
                             .flatMap( imageLogicFacade::deleteImage )
                             .then(
                                     Mono.when(
-                                            userRepository.delete( userEntity ),
-                                            storeRepository.deleteById( userEntity.getStoreId() ),
-                                            productRepository.deleteAllByStoreId( storeId )
+                                            jpaUserRepository.delete( userEntity ),
+                                            jpaStoreRepository.deleteById( userEntity.getStoreId() ),
+                                            jpaProductRepository.deleteAllByStoreId( storeId )
                                     ).onErrorResume( e -> Mono.error( new GlobalException( "Error deleting user" )) )
                             );
                 });
     }
 
     public Mono<Void> deleteManyProducts( List<String> productIds ) {
-        return productRepository.findAllById( productIds )
+        return jpaProductRepository.findAllById( productIds )
                 .flatMap(product ->
                         Mono.when(
                         imageLogicFacade.deleteImage( product ),
-                        productRepository.deleteById( product.getProductID() )
+                        jpaProductRepository.deleteById( product.getProductID() )
 
                 )).then();
     }
 
     public Flux<UserResponseDTO> getAllUsers() {
-        return userRepository.findAll()
+        return jpaUserRepository.findAll()
                 .map(UserEntity::entityToResponseDTO);
     }
 }

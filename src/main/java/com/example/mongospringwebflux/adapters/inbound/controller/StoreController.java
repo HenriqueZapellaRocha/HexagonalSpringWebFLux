@@ -2,7 +2,7 @@ package com.example.mongospringwebflux.adapters.inbound.controller;
 
 
 import com.example.mongospringwebflux.application.service.services.StoreService;
-import com.example.mongospringwebflux.adapters.inbound.controller.DTOS.responses.StoreResponseDTO;
+import com.example.mongospringwebflux.domain.DTOS.responses.StoreResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

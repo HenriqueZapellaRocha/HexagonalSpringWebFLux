@@ -1,7 +1,7 @@
 package com.example.mongospringwebflux.infrastructure.configs.security;
 
 
-import com.example.mongospringwebflux.adapters.outbound.repository.UserRepository;
+import com.example.mongospringwebflux.adapters.outbound.repository.user.JpaUserRepository;
 import com.example.mongospringwebflux.application.service.services.securityServices.TokenService;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,7 +20,7 @@ import reactor.core.publisher.Mono;
 public class SecurityFilter implements WebFilter {
 
     private TokenService tokenService;
-    private UserRepository userRepository;
+    private JpaUserRepository jpaUserRepository;
 
     @NotNull
     @Override
@@ -31,7 +31,7 @@ public class SecurityFilter implements WebFilter {
 
         if ( token != null ) {
             return tokenService.validateToke( token )
-                    .flatMap( login -> userRepository.findByLogin( login )
+                    .flatMap( login -> jpaUserRepository.findByLogin( login )
                             .flatMap( user -> {
                                 var authentication = new UsernamePasswordAuthenticationToken( user, null,
                                                                                             user.getAuthorities() );
