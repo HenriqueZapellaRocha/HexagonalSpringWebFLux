@@ -6,7 +6,6 @@ import com.example.mongospringwebflux.domain.user.UserRepositoryI;
 import com.example.mongospringwebflux.utils.mappers.UserMappers;
 import lombok.Data;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -17,6 +16,7 @@ public class UserRepositoryImp implements UserRepositoryI {
 
     private final JpaUserRepository userRepository;
     private final UserMappers userMappers;
+    private final JpaUserRepository jpaUserRepository;
 
     @Override
     public Mono<UserDetails> findByLogin( String login ) {
@@ -24,8 +24,9 @@ public class UserRepositoryImp implements UserRepositoryI {
     }
 
     @Override
-    public Mono<UserEntity> findById( String id ) {
-        return userRepository.findById( id );
+    public Mono<User> findById( String id ) {
+        return userRepository.findById( id )
+                .map(userMappers::EntityToDomain);
     }
 
     @Override
@@ -38,4 +39,10 @@ public class UserRepositoryImp implements UserRepositoryI {
     public Flux<User> findAll() {
         return userRepository.findAll().map( userMappers::EntityToDomain );
     }
+
+    @Override
+    public Mono<Void> delete(User user) {
+        return jpaUserRepository.delete( userMappers.DomainToEntity( user ) );
+    }
+
 }

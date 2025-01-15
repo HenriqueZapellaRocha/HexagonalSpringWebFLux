@@ -34,4 +34,9 @@ public class StoreRepositoryImp implements StoreRepositoryI {
         return jpaStoreRepository.findAll()
                 .map( storeMappers::EntityToDomain );
     }
+
+    @Override
+    public Mono<Void> deleteById( String storeId ) {
+        return jpaStoreRepository.deleteById( storeId );
+    }
 }

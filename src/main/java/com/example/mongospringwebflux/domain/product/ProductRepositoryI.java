@@ -17,4 +17,5 @@ public interface ProductRepositoryI {
     Flux<Product> findAllByStoreId( String storeId );
     Flux<Product> findAllById( List<String> ids );
     Mono<Void> delete( Product product );
+    Mono<Void> deleteById( String id );
 }

@@ -62,4 +62,9 @@ public class ProductRepositoryImp implements ProductRepositoryI {
     public Mono<Void> delete(Product product) {
         return jpaProductRepository.delete( productMappers.DomainToEntity( product ) );
     }
+
+    @Override
+    public Mono<Void> deleteById( String id ) {
+        return jpaProductRepository.deleteById( id );
+    }
 }
