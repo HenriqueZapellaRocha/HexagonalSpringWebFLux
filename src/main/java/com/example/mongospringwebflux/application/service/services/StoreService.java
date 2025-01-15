@@ -5,6 +5,9 @@ import com.example.mongospringwebflux.adapters.outbound.repository.entities.Stor
 import com.example.mongospringwebflux.domain.DTOS.requests.StoreCreationRequestDTO;
 import com.example.mongospringwebflux.domain.DTOS.responses.StoreResponseDTO;
 import com.example.mongospringwebflux.application.service.interfaces.StoreServiceI;
+import com.example.mongospringwebflux.domain.store.Store;
+import com.example.mongospringwebflux.domain.store.StoreRepositoryI;
+import com.example.mongospringwebflux.utils.mappers.StoreMappers;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
@@ -15,12 +18,13 @@ import reactor.core.publisher.Mono;
 @AllArgsConstructor
 public class StoreService implements StoreServiceI {
 
-    private final JpaStoreRepository jpaStoreRepository;
+    private final StoreRepositoryI storeRepository;
+    private final StoreMappers storeMappers;
 
-    public Mono<StoreEntity> createStore( StoreCreationRequestDTO storeRequest, String id ) {
+    public Mono<Store> createStore( StoreCreationRequestDTO storeRequest, String id ) {
 
-        return jpaStoreRepository.save(
-                        StoreEntity.builder()
+        return storeRepository.save(
+                        Store.builder()
                                 .id( id )
                                 .name( storeRequest.name() )
                                 .description( storeRequest.description() )
@@ -34,11 +38,11 @@ public class StoreService implements StoreServiceI {
 
 
     public Flux<StoreResponseDTO> getAllStores() {
-        return jpaStoreRepository.findAll().map( StoreResponseDTO::entityToResponse );
+        return storeRepository.findAll().map( storeMappers::DomainToResponseDTO );
     }
 
     public Mono<StoreResponseDTO> getStoreById( String id ) {
-        return jpaStoreRepository.findById( id )
-                .map( StoreResponseDTO::entityToResponse );
+        return storeRepository.findById( id )
+                .map( storeMappers::DomainToResponseDTO );
     }
 }
