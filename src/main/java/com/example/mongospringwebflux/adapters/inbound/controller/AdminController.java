@@ -1,10 +1,10 @@
 package com.example.mongospringwebflux.adapters.inbound.controller;
 
 
-import com.example.mongospringwebflux.application.service.services.AdminService;
-import com.example.mongospringwebflux.domain.DTOS.requests.ProductRequestDTO;
-import com.example.mongospringwebflux.domain.DTOS.responses.ProductResponseDTO;
-import com.example.mongospringwebflux.domain.DTOS.responses.UserResponseDTO;
+import com.example.domain.DTOS.requests.ProductRequestDTO;
+import com.example.domain.DTOS.responses.ProductResponseDTO;
+import com.example.domain.DTOS.responses.UserResponseDTO;
+import com.example.service.services.AdminService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -26,9 +26,9 @@ public class AdminController {
     }
 
     @PostMapping( "/product/{storeId}" )
-    public Mono<ProductResponseDTO> addProduct( @PathVariable String storeId,
-                                                @RequestParam( name = "currency" ) String currency,
-                                                @RequestBody @Valid ProductRequestDTO productRequestDTO ) {
+    public Mono<ProductResponseDTO> addProduct(@PathVariable String storeId,
+                                               @RequestParam( name = "currency" ) String currency,
+                                               @RequestBody @Valid ProductRequestDTO productRequestDTO ) {
 
         return adminService.addProductToRelatedStore( productRequestDTO, currency, "USD", storeId  );
     }

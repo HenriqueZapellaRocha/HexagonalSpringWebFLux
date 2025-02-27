@@ -1,15 +1,15 @@
 package com.example.mongospringwebflux.adapters.inbound.controller;
 
 
-import com.example.mongospringwebflux.application.service.interfaces.CookieServiceI;
-import com.example.mongospringwebflux.application.service.interfaces.ProductServiceI;
-import com.example.mongospringwebflux.domain.user.User;
-import com.example.mongospringwebflux.infrastructure.exception.GlobalException;
-import com.example.mongospringwebflux.application.service.facades.ImageLogicFacade;
-import com.example.mongospringwebflux.adapters.outbound.repository.entities.UserEntity;
-import com.example.mongospringwebflux.domain.DTOS.requests.ProductRequestDTO;
-import com.example.mongospringwebflux.domain.DTOS.responses.ProductResponseDTO;
-import com.example.mongospringwebflux.utils.mappers.UserMappers;
+import com.example.domain.DTOS.requests.ProductRequestDTO;
+import com.example.domain.DTOS.responses.ProductResponseDTO;
+import com.example.domain.user.User;
+import com.example.domain.DTOS.exceptions.GlobalException;
+import com.example.mappers.UserMappers;
+import com.example.outbound.repository.entities.UserEntity;
+import com.example.service.facades.ImageLogicFacade;
+import com.example.service.interfaces.CookieServiceI;
+import com.example.service.interfaces.ProductServiceI;
 import jakarta.validation.Valid;
 import org.apache.commons.compress.utils.FileNameUtils;
 import org.springframework.http.codec.multipart.FilePart;
@@ -36,9 +36,9 @@ public class ProductController {
 
 
     @PostMapping( "/add" )
-    public Mono<ProductResponseDTO> add( @RequestBody @Valid ProductRequestDTO product,
-                                         @RequestParam( name = "currency" ) String currency,
-                                         @AuthenticationPrincipal User currentUser ) {
+    public Mono<ProductResponseDTO> add(@RequestBody @Valid ProductRequestDTO product,
+                                        @RequestParam( name = "currency" ) String currency,
+                                        @AuthenticationPrincipal User currentUser ) {
 
         return productService.add( product,currency, "USD", currentUser );
     }

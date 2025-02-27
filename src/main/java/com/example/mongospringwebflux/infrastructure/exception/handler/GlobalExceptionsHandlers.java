@@ -1,11 +1,11 @@
 package com.example.mongospringwebflux.infrastructure.exception.handler;
 
 
-import com.example.mongospringwebflux.infrastructure.exception.dtos.GlobalExceptionDTO;
-import com.example.mongospringwebflux.infrastructure.exception.dtos.InvalidInputValuesExceptionDTO;
-import com.example.mongospringwebflux.infrastructure.exception.dtos.NotFoundExceptionDTO;
-import com.example.mongospringwebflux.infrastructure.exception.GlobalException;
-import com.example.mongospringwebflux.infrastructure.exception.NotFoundException;
+import com.example.domain.DTOS.exceptions.GlobalExceptionDTO;
+import com.example.domain.DTOS.exceptions.InvalidInputValuesExceptionDTO;
+import com.example.domain.DTOS.exceptions.NotFoundExceptionDTO;
+import com.example.domain.DTOS.exceptions.GlobalException;
+import com.example.domain.DTOS.exceptions.NotFoundException;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.BadCredentialsException;

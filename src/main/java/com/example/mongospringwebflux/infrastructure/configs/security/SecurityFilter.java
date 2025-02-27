@@ -1,10 +1,10 @@
 package com.example.mongospringwebflux.infrastructure.configs.security;
 
 
-import com.example.mongospringwebflux.adapters.outbound.repository.entities.UserEntity;
-import com.example.mongospringwebflux.application.service.services.securityServices.TokenService;
-import com.example.mongospringwebflux.domain.user.UserRepositoryI;
-import com.example.mongospringwebflux.utils.mappers.UserMappers;
+import com.example.domain.user.UserRepositoryI;
+import com.example.mappers.UserMappers;
+import com.example.outbound.repository.entities.UserEntity;
+import com.example.service.services.securityServices.TokenService;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.jetbrains.annotations.NotNull;
