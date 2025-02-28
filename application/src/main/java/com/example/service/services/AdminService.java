@@ -8,13 +8,13 @@ import com.example.domain.product.Product;
 import com.example.domain.product.ProductRepositoryI;
 import com.example.domain.store.StoreRepositoryI;
 import com.example.domain.user.UserRepositoryI;
-import com.example.mappers.ProductMappers;
-import com.example.mappers.UserMappers;
 import com.example.outbound.integration.exchange.ExchangeIntegration;
 import com.example.service.interfaces.AdminServiceI;
 import com.example.domain.DTOS.exceptions.GlobalException;
 import com.example.domain.DTOS.exceptions.NotFoundException;
 import com.example.service.facades.ImageLogicFacade;
+import com.example.service.mappers.ServiceProductMappers;
+import com.example.service.mappers.ServiceUserMappers;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
@@ -31,8 +31,8 @@ public class AdminService implements AdminServiceI {
     private final StoreRepositoryI storeRepository;
     private final ExchangeIntegration exchangeIntegration;
     private final ImageLogicFacade imageLogicFacade;
-    private final ProductMappers productMappers;
-    private final UserMappers userMappers;
+    private final ServiceProductMappers productMappers;
+    private final ServiceUserMappers userMappers;
 
     public Mono<ProductResponseDTO> addProductToRelatedStore( ProductRequestDTO productRequest, String from,
                                                              String to, String storeId ) {

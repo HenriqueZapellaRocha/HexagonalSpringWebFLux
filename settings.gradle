@@ -1,6 +1,8 @@
 rootProject.name = 'MongoSpringWebFlux'
-include 'utils'
 include 'outbound'
 include 'domain'
 include 'application'
 include 'entities'
+include 'inbound'
+
+

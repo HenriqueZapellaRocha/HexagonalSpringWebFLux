@@ -3,7 +3,7 @@ package com.example.outbound.repository.user;
 
 import com.example.domain.user.User;
 import com.example.domain.user.UserRepositoryI;
-import com.example.mappers.UserMappers;
+import com.example.outbound.mappers.UserMappers;
 import lombok.Data;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;

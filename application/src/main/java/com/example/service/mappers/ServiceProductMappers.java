@@ -1,4 +1,4 @@
-package com.example.mappers;
+package com.example.service.mappers;
 
 
 
@@ -11,31 +11,9 @@ import org.springframework.stereotype.Service;
 import java.util.UUID;
 
 @Service
-public class ProductMappers {
+public class ServiceProductMappers {
 
-    public Product EntityToDomain( ProductEntity productEntity ) {
-        return Product.builder()
-                .productID( productEntity.getProductID() )
-                .name( productEntity.getName() )
-                .price( productEntity.getPrice() )
-                .description( productEntity.getDescription() )
-                .storeId( productEntity.getStoreId() )
-                .imageUrl( productEntity.getImageUrl() )
-                .build();
-    }
-
-    public ProductEntity DomainToEntity( Product product ) {
-        return ProductEntity.builder()
-                .productID( product.getProductID() )
-                .name( product.getName() )
-                .price( product.getPrice() )
-                .description( product.getDescription() )
-                .storeId( product.getStoreId() )
-                .imageUrl( product.getImageUrl() )
-                .build();
-    }
-
-    public ProductResponseDTO DomainToResponseDTO(Product product, String currency ) {
+    public ProductResponseDTO DomainToResponseDTO( Product product, String currency ) {
         return ProductResponseDTO.builder()
                 .productID( product.getProductID() )
                 .name( product.getName() )
@@ -45,8 +23,6 @@ public class ProductMappers {
                 .imageURL( product.getImageUrl() )
                 .build();
     }
-
-
 
     public ProductEntity requestToEntity( ProductRequestDTO productRequestDTO ) {
         return ProductEntity.builder()

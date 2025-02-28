@@ -12,11 +12,11 @@ import com.example.domain.product.ProductRepositoryI;
 import com.example.domain.store.StoreRepositoryI;
 import com.example.domain.user.User;
 import com.example.entities.ProductEntity;
-import com.example.mappers.ProductMappers;
 import com.example.outbound.integration.exchange.ExchangeIntegration;
 import com.example.service.facades.interfaces.ImageLogicFacadeI;
 import com.example.service.interfaces.ProductServiceI;
 import com.example.domain.DTOS.exceptions.NotFoundException;
+import com.example.service.mappers.ServiceProductMappers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
@@ -31,7 +31,7 @@ public class ProductService implements ProductServiceI {
     private final ExchangeIntegration exchangeIntegration;
     private final StoreRepositoryI storeRepository;
     private final ImageLogicFacadeI imageLogicFacade;
-    private final ProductMappers productMappers;
+    private final ServiceProductMappers productMappers;
 
     public Mono<ProductResponseDTO> add( ProductRequestDTO product, String from, String to, User currentUser ) {
         Product productDomain = productMappers.requestToDomain( product );

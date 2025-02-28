@@ -1,7 +1,7 @@
 package com.example.service.services.securityServices;
 
 import com.example.domain.user.UserRepositoryI;
-import com.example.mappers.UserMappers;
+import com.example.service.mappers.ServiceUserMappers;
 import com.example.service.services.securityServices.interfaces.AuthServiceI;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,7 +17,7 @@ import reactor.core.publisher.Mono;
 public class AuthService implements ReactiveUserDetailsService, AuthServiceI {
 
     private final UserRepositoryI userRepository;
-    private final UserMappers userMappers;
+    private final ServiceUserMappers userMappers;
 
     @Override
     public Mono<UserDetails> findByUsername( String username ) {

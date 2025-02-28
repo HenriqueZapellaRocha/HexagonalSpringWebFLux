@@ -30,11 +30,16 @@ dependencyManagement {
 }
 
 dependencies {
+    implementation(project(':domain'))
+    implementation(project(':entities'))
+    implementation 'org.springframework.boot:spring-boot-starter-data-mongodb-reactive'
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+    testImplementation 'org.springframework.security:spring-security-test'
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
-    implementation(project(':domain'))
-    implementation(project(':utils'))
-    implementation(project(':entities'))
+    implementation 'io.minio:minio:8.5.7'
 }
 
 test {

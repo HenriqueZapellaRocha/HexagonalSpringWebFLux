@@ -5,8 +5,8 @@ import com.example.domain.DTOS.requests.StoreCreationRequestDTO;
 import com.example.domain.DTOS.responses.StoreResponseDTO;
 import com.example.domain.store.Store;
 import com.example.domain.store.StoreRepositoryI;
-import com.example.mappers.StoreMappers;
 import com.example.service.interfaces.StoreServiceI;
+import com.example.service.mappers.ServiceStoreMappers;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
@@ -18,7 +18,7 @@ import reactor.core.publisher.Mono;
 public class StoreService implements StoreServiceI {
 
     private final StoreRepositoryI storeRepository;
-    private final StoreMappers storeMappers;
+    private final ServiceStoreMappers storeMappers;
 
     public Mono<Store> createStore( StoreCreationRequestDTO storeRequest, String id ) {
 

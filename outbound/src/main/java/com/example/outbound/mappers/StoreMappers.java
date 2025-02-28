@@ -1,7 +1,6 @@
-package com.example.mappers;
+package com.example.outbound.mappers;
 
 
-import com.example.domain.DTOS.responses.StoreResponseDTO;
 import com.example.domain.store.Store;
 import com.example.entities.StoreEntity;
 import org.springframework.stereotype.Service;
@@ -33,12 +32,4 @@ public class StoreMappers {
                 .build();
     }
 
-    public StoreResponseDTO DomainToResponseDTO(Store store ) {
-        return StoreResponseDTO.builder()
-                .id( store.getId() )
-                .name( store.getName() )
-                .city( store.getCity() )
-                .state( store.getState() )
-                .build();
-    }
 }

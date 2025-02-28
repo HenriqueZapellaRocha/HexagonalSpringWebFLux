@@ -5,8 +5,6 @@ import com.example.domain.DTOS.requests.ProductRequestDTO;
 import com.example.domain.DTOS.responses.ProductResponseDTO;
 import com.example.domain.user.User;
 import com.example.domain.DTOS.exceptions.GlobalException;
-import com.example.service.mappers.UserMappers;
-import com.example.service.outbound.repository.entities.UserEntity;
 import com.example.service.facades.ImageLogicFacade;
 import com.example.service.interfaces.CookieServiceI;
 import com.example.service.interfaces.ProductServiceI;
@@ -32,7 +30,6 @@ public class ProductController {
     private final ProductServiceI productService;
     private final ImageLogicFacade imageLogicFacade;
     private final CookieServiceI cookieService;
-    private final UserMappers userMappers;
 
 
     @PostMapping( "/add" )
@@ -88,7 +85,7 @@ public class ProductController {
     @PutMapping( "/{id}" )
     public Mono<ProductResponseDTO> update( @RequestBody @Valid ProductRequestDTO product,
                                             @PathVariable String id,
-                                            @AuthenticationPrincipal UserEntity currentUser,
+                                            @AuthenticationPrincipal User currentUser,
                                             @RequestParam( name = "currency" ) String currency ) {
 
         return productService.update( product, id, currentUser.getStoreId(), currency, "USD" );

@@ -3,7 +3,7 @@ package com.example.mongospringwebflux.infrastructure.configs.security;
 
 import com.example.domain.user.UserRepositoryI;
 import com.example.entities.UserEntity;
-import com.example.mappers.UserMappers;
+import com.example.service.mappers.ServiceUserMappers;
 import com.example.service.services.securityServices.TokenService;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -21,14 +21,15 @@ import reactor.core.publisher.Mono;
 @Component
 public class SecurityFilter implements WebFilter {
 
-    private final UserMappers userMappers;
+    private final ServiceUserMappers userMappers;
     private TokenService tokenService;
     private UserRepositoryI userRepository;
 
+
     @NotNull
     @Override
-    public Mono<Void> filter(@NotNull ServerWebExchange exchange,
-                             @NotNull WebFilterChain chain ) {
+    public Mono<Void> filter( ServerWebExchange exchange,
+                              WebFilterChain chain ) {
 
         String token = this.recoverToken( exchange );
 

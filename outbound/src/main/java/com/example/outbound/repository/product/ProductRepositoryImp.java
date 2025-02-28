@@ -3,7 +3,7 @@ package com.example.outbound.repository.product;
 
 import com.example.domain.product.Product;
 import com.example.domain.product.ProductRepositoryI;
-import com.example.mappers.ProductMappers;
+import com.example.outbound.mappers.ProductMappers;
 import lombok.Data;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
