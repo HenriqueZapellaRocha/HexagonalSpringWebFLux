@@ -1,7 +1,7 @@
 package com.example.service.services.securityServices.interfaces;
 
 
-import com.example.outbound.repository.entities.UserEntity;
+import com.example.entities.UserEntity;
 import reactor.core.publisher.Mono;
 
 public interface TokenServiceI {

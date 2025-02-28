@@ -32,10 +32,8 @@ dependencyManagement {
 dependencies {
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
-    implementation(project(':domain'))
-    implementation(project(':outbound'))
-    implementation(project(':utils'))
-    implementation(project(':entities'))
+    implementation( project( ':domain' ) )
+    implementation( project(':entities') )
 }
 
 test {

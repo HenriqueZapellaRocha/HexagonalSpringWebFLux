@@ -13,6 +13,11 @@ repositories {
     mavenCentral()
 }
 
+dependencies {
+    implementation( project( ':application' ))
+    implementation( project( ':domain' ) )
+}
+
 configurations {
     compileOnly {
         extendsFrom annotationProcessor
@@ -32,10 +37,6 @@ dependencyManagement {
 dependencies {
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
-    implementation(project(':domain'))
-    implementation(project(':outbound'))
-    implementation(project(':utils'))
-    implementation(project(':entities'))
 }
 
 test {

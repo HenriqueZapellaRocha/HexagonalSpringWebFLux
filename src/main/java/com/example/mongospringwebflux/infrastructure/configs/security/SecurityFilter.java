@@ -2,12 +2,12 @@ package com.example.mongospringwebflux.infrastructure.configs.security;
 
 
 import com.example.domain.user.UserRepositoryI;
+import com.example.entities.UserEntity;
 import com.example.mappers.UserMappers;
-import com.example.outbound.repository.entities.UserEntity;
 import com.example.service.services.securityServices.TokenService;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.ReactiveSecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -27,8 +27,8 @@ public class SecurityFilter implements WebFilter {
 
     @NotNull
     @Override
-    public Mono<Void> filter( @NotNull ServerWebExchange exchange,
-                              @NotNull WebFilterChain chain ) {
+    public Mono<Void> filter(@NotNull ServerWebExchange exchange,
+                             @NotNull WebFilterChain chain ) {
 
         String token = this.recoverToken( exchange );
 

@@ -9,7 +9,7 @@ import org.springframework.data.mongodb.repository.config.EnableReactiveMongoRep
 
 
 @SpringBootApplication( scanBasePackages = "com.example" )
-@EnableReactiveMongoRepositories( basePackages = "com.example.outbound")
+@EnableReactiveMongoRepositories( basePackages = "com.example.outbound.repository")
 @OpenAPIDefinition(
         info = @Info(title = "Spring Web FLux Stores API", version = "1.0",
                 description = "This is a documentantion of: https://github.com/HenriqueZapellaRocha/MongoSpringWebFlux ") )

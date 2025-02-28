@@ -31,9 +31,10 @@ ext {
 
 
 dependencies {
-
+    implementation(project(':outbound'))
     implementation(project(':domain'))
-    implementation(project(':adapters'))
+    implementation(project(':utils'))
+    implementation(project(':entities'))
     implementation(project(':application'))
 
 
