@@ -1,6 +1,6 @@
 package com.example.outbound.repository.store;
 
-import com.example.entities.StoreEntity;
+import com.example.outbound.entities.StoreEntity;
 import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
 import org.springframework.stereotype.Repository;
 

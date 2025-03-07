@@ -5,7 +5,7 @@ package com.example.service.mappers;
 import com.example.domain.DTOS.requests.ProductRequestDTO;
 import com.example.domain.DTOS.responses.ProductResponseDTO;
 import com.example.domain.product.Product;
-import com.example.entities.ProductEntity;
+import com.example.outbound.entities.ProductEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;

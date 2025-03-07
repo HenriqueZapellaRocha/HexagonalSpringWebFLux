@@ -4,7 +4,7 @@ package com.example.controller;
 import com.example.domain.DTOS.requests.ProductRequestDTO;
 import com.example.domain.DTOS.responses.ProductResponseDTO;
 import com.example.domain.DTOS.responses.UserResponseDTO;
-import com.example.service.services.AdminService;
+import com.example.service.ports.AdminServicePort;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +18,7 @@ import java.util.List;
 @RequestMapping( "/admin" )
 public class AdminController {
 
-    private final AdminService adminService;
+    private final AdminServicePort adminService;
 
     @DeleteMapping("/user/{id}")
     public Mono<Void> deleteUser( @PathVariable String id ) {
@@ -26,9 +26,9 @@ public class AdminController {
     }
 
     @PostMapping( "/product/{storeId}" )
-    public Mono<ProductResponseDTO> addProduct(@PathVariable String storeId,
-                                               @RequestParam( name = "currency" ) String currency,
-                                               @RequestBody @Valid ProductRequestDTO productRequestDTO ) {
+    public Mono<ProductResponseDTO> addProduct( @PathVariable String storeId,
+                                                @RequestParam( name = "currency" ) String currency,
+                                                @RequestBody @Valid ProductRequestDTO productRequestDTO ) {
 
         return adminService.addProductToRelatedStore( productRequestDTO, currency, "USD", storeId  );
     }

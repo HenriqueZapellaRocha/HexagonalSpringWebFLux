@@ -1,7 +1,6 @@
 package com.example.mongospringwebflux.infrastructure.configs.minio;
 
 import io.minio.MinioAsyncClient;
-import io.minio.MinioClient;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -24,27 +24,27 @@ public class SecurityConfig {
     private SecurityFilter securityFilter;
 
     @Bean
-    public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
+    public SecurityWebFilterChain securityWebFilterChain( ServerHttpSecurity http ) {
         return http
                 .csrf( ServerHttpSecurity.CsrfSpec::disable )
                 .authorizeExchange( auth -> auth
-                        .pathMatchers(HttpMethod.POST, "/auth/login").permitAll()
-                        .pathMatchers(HttpMethod.POST, "/auth/register").permitAll()
+                        .pathMatchers( HttpMethod.POST, "/auth/login" ).permitAll()
+                        .pathMatchers( HttpMethod.POST, "/auth/register" ).permitAll()
 
-                        .pathMatchers(HttpMethod.POST, "/product/**")
-                                                .hasAnyAuthority("ROLE_SUPERVISOR", "ROLE_ADMIN")
-                        .pathMatchers(HttpMethod.PUT, "/product/**")
-                                                .hasAnyAuthority("ROLE_SUPERVISOR" )
-                        .pathMatchers(HttpMethod.DELETE, "/product**")
-                                                .hasAnyAuthority("ROLE_SUPERVISOR", "ROLE_ADMIN")
-                        .pathMatchers(HttpMethod.GET, "/product**")
-                                            .hasAnyAuthority("ROLE_SUPERVISOR", "ROLE_ADMIN", "ROLE_USER")
+                        .pathMatchers( HttpMethod.POST, "/product/**" )
+                                                .hasAnyAuthority( "ROLE_SUPERVISOR", "ROLE_ADMIN" )
+                        .pathMatchers( HttpMethod.PUT, "/product/**" )
+                                                .hasAnyAuthority( "ROLE_SUPERVISOR" )
+                        .pathMatchers( HttpMethod.DELETE, "/product**" )
+                                                .hasAnyAuthority( "ROLE_SUPERVISOR", "ROLE_ADMIN" )
+                        .pathMatchers( HttpMethod.GET, "/product**" )
+                                            .hasAnyAuthority( "ROLE_SUPERVISOR", "ROLE_ADMIN", "ROLE_USER" )
 
-                        .pathMatchers(HttpMethod.GET, "/store**")
-                                            .hasAnyAuthority("ROLE_SUPERVISOR", "ROLE_ADMIN", "ROLE_USER")
+                        .pathMatchers( HttpMethod.GET, "/store**" )
+                                            .hasAnyAuthority( "ROLE_SUPERVISOR", "ROLE_ADMIN", "ROLE_USER" )
 
-                        .pathMatchers("/admin/**")
-                                            .hasAuthority("ROLE_ADMIN")
+                        .pathMatchers( "/admin/**" )
+                                            .hasAuthority( "ROLE_ADMIN" )
 
                         .pathMatchers( "/webjars/**", "/swagger-ui/**", "/v3/api-docs/**" )
                                                 .permitAll()

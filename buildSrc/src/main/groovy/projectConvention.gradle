@@ -1,0 +1,32 @@
+plugins {
+    id 'java'
+}
+
+
+dependencies {
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.0'
+}
+
+tasks.register( "runDocker", Exec ) {
+    group = 'build'
+    commandLine "docker-compose", "up", "-d"
+}
+
+tasks.named( "bootRun" ) {
+    dependsOn( "runDocker" )
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}

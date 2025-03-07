@@ -5,9 +5,10 @@ import com.example.domain.DTOS.requests.ProductRequestDTO;
 import com.example.domain.DTOS.responses.ProductResponseDTO;
 import com.example.domain.user.User;
 import com.example.domain.DTOS.exceptions.GlobalException;
-import com.example.service.facades.ImageLogicFacade;
-import com.example.service.interfaces.CookieServiceI;
-import com.example.service.interfaces.ProductServiceI;
+import com.example.imageValidations.interfaces.ValidFile;
+import com.example.service.facades.interfaces.ImageLogicFacadePort;
+import com.example.service.ports.CookieServicePort;
+import com.example.service.ports.ProductServicePort;
 import jakarta.validation.Valid;
 import org.apache.commons.compress.utils.FileNameUtils;
 import org.springframework.http.codec.multipart.FilePart;
@@ -27,30 +28,25 @@ import java.util.List;
 @RequestMapping( "/product" )
 public class ProductController {
 
-    private final ProductServiceI productService;
-    private final ImageLogicFacade imageLogicFacade;
-    private final CookieServiceI cookieService;
+    private final ProductServicePort productService;
+    private final ImageLogicFacadePort imageLogicFacade;
+    private final CookieServicePort cookieService;
 
 
     @PostMapping( "/add" )
-    public Mono<ProductResponseDTO> add(@RequestBody @Valid ProductRequestDTO product,
-                                        @RequestParam( name = "currency" ) String currency,
-                                        @AuthenticationPrincipal User currentUser ) {
+    public Mono<ProductResponseDTO> add( @RequestBody @Valid ProductRequestDTO product,
+                                         @RequestParam( name = "currency" ) String currency,
+                                         @AuthenticationPrincipal User currentUser ) {
 
         return productService.add( product,currency, "USD", currentUser );
     }
 
     @PostMapping("/uploadProductImage")
-    public Mono<String> uploadFile( @RequestPart("files") FilePart filePart,
+    public Mono<String> uploadFile( @RequestPart("files") @ValidFile FilePart filePart,
                                     @RequestPart("productId") String productId,
                                     @AuthenticationPrincipal User currentUser ) {
 
-        if( FileNameUtils.getExtension( filePart.filename() ).equals( "png" ) ||
-            FileNameUtils.getExtension( filePart.filename() ).equals( "jpg" ) ||
-            FileNameUtils.getExtension( filePart.filename() ).equals( "jpeg" ) )
-            return imageLogicFacade.validateAndPersistsImage( filePart, productId, currentUser );
-
-        return Mono.error( new GlobalException( "file type not suported" ) );
+        return imageLogicFacade.validateAndPersistsImage( filePart, productId, currentUser );
     }
 
 
@@ -60,15 +56,15 @@ public class ProductController {
                                              ServerHttpResponse response ) {
 
         return productService.getById( id, "USD", currency )
-                .doOnNext( product -> {
-                    cookieService.setCookie( response, product.productID() );
-                });
+                .doOnNext( product ->
+                    cookieService.setCookie( response, product.productID() )
+                );
     }
 
     @GetMapping( "/last" )
     public Mono<ProductResponseDTO> getLast( @CookieValue("last") String cookie,
                                              @RequestParam( name = "currency" ) String currency ) {
-        return productService.getById (cookie, "USD", currency );
+        return productService.getById ( cookie, "USD", currency );
     }
 
     @GetMapping( "/All" )

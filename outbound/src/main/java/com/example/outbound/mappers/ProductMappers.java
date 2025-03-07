@@ -4,7 +4,7 @@ package com.example.outbound.mappers;
 
 
 import com.example.domain.product.Product;
-import com.example.entities.ProductEntity;
+import com.example.outbound.entities.ProductEntity;
 import org.springframework.stereotype.Service;
 
 

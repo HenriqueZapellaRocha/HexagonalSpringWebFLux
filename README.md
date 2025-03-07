@@ -1,16 +1,16 @@
-# Spring Boot Web Flux Products API 
-<img src="https://media.licdn.com/dms/image/v2/D5612AQGhS83VpBxWoA/article-cover_image-shrink_720_1280/article-cover_image-shrink_720_1280/0/1720550988047?e=1736380800&v=beta&t=gRNkoFT6IqPYo1rg9U_WOEM_bHeLv5KUup3UgtBR9s8" alt="Spring Boot Logo" width="200" height="100"/>
+# Spring Boot Web Flux marketplace API 
+<img src="https://miro.medium.com/v2/resize:fit:4800/format:webp/1*NRBC0wt4t_ThDKYeu4AW2Q.png" alt="Spring Boot Logo" width="200" height="100"/>
 
 
 
 
 * **This API is created for educational purposes.**
 * **What exactly is this API?**
-    * This API is essentially a CRUD API for managing products, inspired in plataforms 
+    * This API is essentially a CRUD API for managing products, inspired in platforms 
     like Amazon, Mercado Livre etc.
     * Users can be stores admin( Can add and modify products from his store ), normal users( users can see product etc. but can't 
-    change informations ) and admin user( 
-    have access in some admin enpoints like create a product for any store  )
+    change information ) and admin user( 
+    have access in some admin endpoints like create a product for any store  )
     * For the authentication uses Spring security combined with JWT to generate tokens. 
   * The API stores products in MongoDB Atlas and uses MINIO to store the product images.
 
@@ -44,7 +44,7 @@ Here’s a list of the key dependencies used in this project:
 you can configure  it to run with other
 MongoDB servers.**
 
-**To storage the products images this API uses MINIO, like s3 buckets ( for more informations: https://min.io/docs/minio/container/index.html ).**
+**To storage the products images this API uses MINIO, like s3 buckets ( for more information: https://min.io/docs/minio/container/index.html ).**
 
 ---
 

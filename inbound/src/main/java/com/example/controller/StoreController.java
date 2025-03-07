@@ -2,7 +2,7 @@ package com.example.controller;
 
 
 import com.example.domain.DTOS.responses.StoreResponseDTO;
-import com.example.service.services.StoreService;
+import com.example.service.ports.StoreServicePort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,7 +17,7 @@ import reactor.core.publisher.Mono;
 public class StoreController {
 
 
-    private final StoreService storeService;
+    private final StoreServicePort storeService;
 
     @GetMapping( "/all" )
     public Flux<StoreResponseDTO> getRelatedStores() {

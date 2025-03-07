@@ -5,6 +5,7 @@ import io.minio.MinioAsyncClient;
 import io.minio.PutObjectArgs;
 import io.minio.RemoveObjectArgs;
 import lombok.Data;
+import org.apache.commons.compress.utils.FileNameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.buffer.DataBuffer;
@@ -21,8 +22,7 @@ import java.io.InputStream;
 @Data
 public class MinioAdapter {
 
-    @Autowired
-    private MinioAsyncClient minioClient;
+    private final MinioAsyncClient minioClient;
 
     @Value( "${minio.bucket.name}" )
     private String bucketName;

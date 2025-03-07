@@ -24,7 +24,7 @@ public class GlobalExceptionsHandlers {
     @ResponseBody
     @ExceptionHandler( NotFoundException.class )
     public Mono<NotFoundExceptionDTO> handler( final NotFoundException e ) {
-        return Mono.just( new  NotFoundExceptionDTO( e.getMessage() ));
+        return Mono.just( new NotFoundExceptionDTO( e.getMessage() ));
     }
 
     @ResponseStatus( HttpStatus.BAD_REQUEST )

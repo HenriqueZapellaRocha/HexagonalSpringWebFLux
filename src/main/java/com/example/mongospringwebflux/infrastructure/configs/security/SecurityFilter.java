@@ -2,9 +2,9 @@ package com.example.mongospringwebflux.infrastructure.configs.security;
 
 
 import com.example.domain.user.UserRepositoryI;
-import com.example.entities.UserEntity;
+import com.example.outbound.entities.UserEntity;
 import com.example.service.mappers.ServiceUserMappers;
-import com.example.service.services.securityServices.TokenService;
+import com.example.service.services.securityServices.TokenServiceAdapter;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,7 +22,7 @@ import reactor.core.publisher.Mono;
 public class SecurityFilter implements WebFilter {
 
     private final ServiceUserMappers userMappers;
-    private TokenService tokenService;
+    private TokenServiceAdapter tokenService;
     private UserRepositoryI userRepository;
 
 
@@ -37,7 +37,6 @@ public class SecurityFilter implements WebFilter {
             return tokenService.validateToke( token )
                     .flatMap( login -> userRepository.findByLogin( login )
                             .flatMap( user -> {
-                                //TODO create a entity focused in auth
                                 UserEntity userEntity = userMappers.DomainToEntity( user );
                                 var authentication = new UsernamePasswordAuthenticationToken( user, null,
                                                                                             userEntity.getAuthorities() );

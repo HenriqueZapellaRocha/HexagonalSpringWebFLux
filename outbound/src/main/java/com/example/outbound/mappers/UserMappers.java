@@ -2,7 +2,7 @@ package com.example.outbound.mappers;
 
 
 import com.example.domain.user.User;
-import com.example.entities.UserEntity;
+import com.example.outbound.entities.UserEntity;
 import org.springframework.stereotype.Service;
 
 

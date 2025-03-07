@@ -1,7 +1,7 @@
 package com.example.outbound.repository.product;
 
 
-import com.example.entities.ProductEntity;
+import com.example.outbound.entities.ProductEntity;
 import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
