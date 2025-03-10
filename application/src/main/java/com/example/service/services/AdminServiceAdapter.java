@@ -54,7 +54,7 @@ public class AdminServiceAdapter implements AdminServicePort {
     public Mono<Void> deleteUserAndAllInformationRelated( String userId ) {
 
         return userRepository.findById( userId )
-                .switchIfEmpty( Mono.defer( () -> Mono.error(new NotFoundException( "User not found" ) )))
+                .switchIfEmpty( Mono.defer( () -> Mono.error( new NotFoundException( "User not found" ) )))
                 .flatMap( user -> {
                     String storeId = user.getStoreId();
 

@@ -9,7 +9,6 @@ import com.example.domain.user.UserRepositoryI;
 import com.example.outbound.entities.UserEntity;
 import com.example.service.ports.securityPorts.TokenServicePort;
 import com.example.service.ports.securityPorts.UserServicePort;
-import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -31,7 +30,7 @@ public class UserServiceAdapter implements UserServicePort {
 
     public Mono<RegisterResponseDTO> createUser( RegisterRequestDTO registerRequest, String storeId ) {
         return Mono.just( registerRequest )
-                .map( registerRequestDTO -> new BCryptPasswordEncoder().encode( registerRequestDTO.password() ))
+                .map( registerRequestDTO -> new BCryptPasswordEncoder().encode( registerRequestDTO.password() ) )
                 .flatMap( password -> {
 
                     User newUser = User.builder()
@@ -48,12 +47,12 @@ public class UserServiceAdapter implements UserServicePort {
     }
 
 
-    public Mono<AuthResponseDTO> login( @RequestBody @Valid loginRequestDTO login ) {
+    public Mono<AuthResponseDTO> login( @RequestBody loginRequestDTO login ) {
         var usernamePassword = new UsernamePasswordAuthenticationToken( login.login(), login.password() );
 
         return authenticationManager.authenticate( usernamePassword )
                 .flatMap(authentication -> {
-                    UserEntity user = (UserEntity) authentication.getPrincipal();
+                    UserEntity user = ( UserEntity ) authentication.getPrincipal();
 
                     return tokenService.generateToke(user)
                             .map(token -> new AuthResponseDTO(token, user.getLogin()));

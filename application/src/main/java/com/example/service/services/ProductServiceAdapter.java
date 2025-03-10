@@ -25,7 +25,7 @@ import reactor.core.publisher.Mono;
 
 @RequiredArgsConstructor
 @Service
-public class ProductServiceAdapter implements ProductServicePort {
+public class  ProductServiceAdapter implements ProductServicePort {
 
     private final ProductRepositoryI productRepository;
     private final ExchangeIntegration exchangeIntegration;
@@ -40,7 +40,7 @@ public class ProductServiceAdapter implements ProductServicePort {
                 .zipWith( exchangeIntegration.makeExchange( from,to ) )
                 .flatMap( tuple -> {
                     productDomain.setPrice( product.price()
-                                    .multiply( new BigDecimal(String.valueOf( tuple.getT2() ) ) ));
+                                    .multiply( new BigDecimal( String.valueOf( tuple.getT2() ) ) ));
                     productDomain.setStoreId( tuple.getT1().getId() );
                     return productRepository.save( productDomain );
                 } ).map( savedProduct -> productMappers.DomainToResponseDTO( savedProduct, to ) );
@@ -71,7 +71,7 @@ public class ProductServiceAdapter implements ProductServicePort {
                         tuple.getT1().setPrice( productEntity.getPrice() );
 
                         tuple.getT1().setPrice( productEntity.getPrice()
-                            .multiply( new BigDecimal(String.valueOf( tuple.getT2()) ) ));
+                            .multiply( new BigDecimal( String.valueOf( tuple.getT2() ) ) ));
                     return productRepository.save( tuple.getT1() );
 
                  }).map( productSaved -> productMappers.DomainToResponseDTO( productSaved, "USD" ) );

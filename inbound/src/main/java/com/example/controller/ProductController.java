@@ -41,7 +41,7 @@ public class ProductController {
         return productService.add( product,currency, "USD", currentUser );
     }
 
-    @PostMapping("/uploadProductImage")
+    @PostMapping( "/uploadProductImage" )
     public Mono<String> uploadFile( @RequestPart("files") @ValidFile FilePart filePart,
                                     @RequestPart("productId") String productId,
                                     @AuthenticationPrincipal User currentUser ) {

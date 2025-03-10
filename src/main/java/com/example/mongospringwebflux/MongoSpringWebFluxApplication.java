@@ -16,8 +16,8 @@ import org.springframework.data.mongodb.repository.config.EnableReactiveMongoRep
                         "of: https://github.com/HenriqueZapellaRocha/MongoSpringWebFlux " ) )
 public class MongoSpringWebFluxApplication {
 
-    public static void main(String[] args) {
-        SpringApplication.run(MongoSpringWebFluxApplication.class, args);
+    public static void main( String[] args ) {
+        SpringApplication.run( MongoSpringWebFluxApplication.class, args );
     }
 
 }
